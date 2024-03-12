@@ -1,18 +1,17 @@
 // Import required modules
 const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport'); // Import the configured Passport instance
 require('./passport');
-require('./db'); // Import Mongoose configuration
+require('./db');
 const bcrypt = require('bcryptjs');
 const User = require('./models/User'); // Assuming User model is defined in a separate file
 const authRoutes = require('./routes/auth');
 const generateSalt = require('./saltGenerator');
 
-// Initialize Express app
 const app = express();
-
-// Middleware setup
 app.set('view engine', 'ejs'); // Assuming you're using EJS for templating
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
@@ -20,6 +19,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }));
+app.use(cors);
 
 // Mount authentication routes
 app.use(passport.initialize());
@@ -67,7 +67,7 @@ app.get('/logoutConfirmed', (req, res) => {
 });
 
 // Example route that requires authentication and specific role
-app.get('/admin', isAuthenticated, hasPermission('admin'), (req, res) => {
+app.get('/admin', isAuthenticated, hasPermission(1), (req, res) => {
   // Route handler for admin route
   res.send('Welcome to the admin dashboard!');
 });

@@ -1,17 +1,7 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose")
+const enviro = require("dotenv")
 
-// Replace <password> with your MongoDB Atlas password
-const mongoURI = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}.mffezrs.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+enviro.config()
+const connectionString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}.rnwupgu.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
-  const connectToMongoDB = async (uri) => {
-    try {
-      await mongoose.connect(uri);
-      console.log('Connected to MongoDB Atlas');
-    } catch (err) {
-      console.error('Error connecting to MongoDB Atlas:', err);
-    }
-  };
-
-  connectToMongoDB(mongoURI)
-  
-module.exports = connectToMongoDB;
+mongoose.connect(connectionString, {}).then(() => console.log('Connected to MongoDB.')).catch((err)=>console.log(err));
